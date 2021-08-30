@@ -64,6 +64,17 @@ exports.updateBootcamp = async (req, res, next) => {
 // @desc Delete single bootcamp
 // @route DELETE /api/v1/bootcamps/:id
 // @access Private
-exports.deleteBootcamp = (req, res, next) => {};
+exports.deleteBootcamp = async (req, res, next) => {
+	try {
+		const deletedBootcamp = await Bootcamp.findByIdAndDelete(req.params.id);
+
+		if (!deletedBootcamp) {
+			res.status(400).json({ success: false });
+		}
+		res.status(200).json({ success: true, data: {} });
+	} catch (error) {
+		res.status(400).json({ success: false });
+	}
+};
 
 module.exports = exports;
