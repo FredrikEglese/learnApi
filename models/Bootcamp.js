@@ -17,14 +17,14 @@ const BootcampSchema = new mongoose.Schema({
 	website: {
 		type: String,
 		match: [
-			`https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)`,
+			/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/,
 			"Please use a valid URL with http or https",
 		],
 	},
 	email: {
 		type: String,
 		match: [
-			"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$",
+			/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/,
 			"Please use a valid email address",
 		],
 	},
@@ -50,45 +50,46 @@ const BootcampSchema = new mongoose.Schema({
 			postcode: String,
 			country: String,
 		},
-		careers: {
-			type: [String],
-			required: true,
-			enum: [
-				"Web Development",
-				"Mobile Development",
-				"UI/UX",
-				"Data Science",
-				"Other",
-			],
-		},
-		averageRating: {
-			type: Number,
-			min: [0, "Rating must be at least 0"],
-			max: [10, "Rating must be at most 10"],
-		},
-		averageCost: {
-			type: Number,
-		},
-		photo: {
-			type: String,
-			default: "no-photo.jpg",
-		},
-		housing: {
-			type: Boolean,
-			default: false,
-		},
-		jobAssistance: {
-			type: Boolean,
-			default: false,
-		},
-		jobGuarantee: {
-			type: Boolean,
-			default: false,
-		},
-		createdAt: {
-			type: Date,
-			default: Date.now,
-		},
+	},
+	careers: {
+		type: [String],
+		required: true,
+		enum: [
+			"Web Development",
+			"Mobile Development",
+			"UI/UX",
+			"Business",
+			"Data Science",
+			"Other",
+		],
+	},
+	averageRating: {
+		type: Number,
+		min: [0, "Rating must be at least 0"],
+		max: [10, "Rating must be at most 10"],
+	},
+	averageCost: {
+		type: Number,
+	},
+	photo: {
+		type: String,
+		default: "no-photo.jpg",
+	},
+	housing: {
+		type: Boolean,
+		default: false,
+	},
+	jobAssistance: {
+		type: Boolean,
+		default: false,
+	},
+	jobGuarantee: {
+		type: Boolean,
+		default: false,
+	},
+	createdAt: {
+		type: Date,
+		default: Date.now,
 	},
 });
 
