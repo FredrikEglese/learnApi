@@ -3,6 +3,8 @@ const express = require("express");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const colors = require("colors");
+
+const errorHandler = require("./middleware/error");
 const connectDB = require("./config/db");
 
 // Load env vars
@@ -17,7 +19,6 @@ const app = express();
 // Body parser
 app.use(express.json());
 
-// Mount middleware
 if (process.env.NODE_ENV === "development") {
 	app.use(morgan("dev"));
 }
@@ -25,6 +26,8 @@ if (process.env.NODE_ENV === "development") {
 // Mount routes
 const bootcamps = require("./routes/bootcamps");
 app.use("/api/v1/bootcamps", bootcamps);
+
+app.use(errorHandler);
 
 // Start listening
 const server = app.listen(
