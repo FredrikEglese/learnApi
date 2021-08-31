@@ -1,4 +1,7 @@
 const mongoose = require("mongoose");
+const slugify = require("slugify");
+
+const geocoder = require("../utils/geocoder");
 
 const BootcampSchema = new mongoose.Schema({
 	name: {
@@ -31,25 +34,23 @@ const BootcampSchema = new mongoose.Schema({
 	address: {
 		type: String,
 		required: [true, "Please use an address"],
-		location: {
-			// GeoJSON Point
-			type: {
-				type: String,
-				enum: ["Point"],
-				required: true,
-			},
-			coordinates: {
-				type: [Number],
-				required: true,
-				index: "2dsphere",
-			},
-			formattedAddress: String,
-			street: String,
-			city: String,
-			state: String,
-			postcode: String,
-			country: String,
+	},
+	location: {
+		// GeoJSON Point
+		type: {
+			type: String,
+			enum: ["Point"],
 		},
+		coordinates: {
+			type: [Number],
+			index: "2dsphere",
+		},
+		formattedAddress: String,
+		street: String,
+		city: String,
+		state: String,
+		postcode: String,
+		country: String,
 	},
 	careers: {
 		type: [String],
@@ -91,6 +92,32 @@ const BootcampSchema = new mongoose.Schema({
 		type: Date,
 		default: Date.now,
 	},
+});
+
+BootcampSchema.pre("save", function (next) {
+	this.slug = slugify(this.name, { lower: true, remove: /[*+~.()'"!:@]/g });
+	next();
+});
+
+//
+BootcampSchema.pre("save", async function (next) {
+	const loc = await geocoder.geocode(this.address);
+
+	if (loc) {
+		this.location = {
+			type: "Point",
+			coordinates: [loc[0].longitude ?? 0, loc[0].latitude ?? 0],
+			formattedAddress: loc[0].formattedAddress,
+			street: loc[0].streetName,
+			city: loc[0].city,
+			state: loc[0].stateCode,
+			postcode: loc[0].zipcode,
+			country: loc[0].countryCode,
+		};
+		// Don't save address if we have the full details
+		this.address = undefined;
+	}
+	next();
 });
 
 module.exports = mongoose.model("Bootcamp", BootcampSchema);
