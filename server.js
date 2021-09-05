@@ -27,6 +27,9 @@ if (process.env.NODE_ENV === "development") {
 const bootcamps = require("./routes/bootcamps");
 app.use("/api/v1/bootcamps", bootcamps);
 
+const courses = require("./routes/courses");
+app.use("/api/v1/courses", courses);
+
 app.use(errorHandler);
 
 // Start listening
