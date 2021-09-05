@@ -25,3 +25,24 @@ exports.getCourses = AsyncHandler(async (req, res, next) => {
 		data: courses,
 	});
 });
+
+// @desc Get a specific course
+// @route GET /api/v1/courses/:id
+// @access Public
+exports.getCourse = AsyncHandler(async (req, res, next) => {
+	const course = await Course.findById(req.params.id).populate({
+		path: "bootcamp",
+		select: "name description",
+	});
+
+	if (!course) {
+		return next(
+			new ErrorResponse(`No course with id of ${req.params.id}`, 404)
+		);
+	}
+
+	res.status(200).json({
+		success: true,
+		data: course,
+	});
+});
