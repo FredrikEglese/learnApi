@@ -25,7 +25,7 @@ exports.getBootcamps = AsyncHandler(async (req, res, next) => {
 		(match) => `$${match}`
 	);
 
-	var query = Bootcamp.find(JSON.parse(queryStr));
+	var query = Bootcamp.find(JSON.parse(queryStr)).populate("courses");
 
 	// Select fields
 	if (req.query.select) {
