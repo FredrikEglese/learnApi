@@ -2,6 +2,8 @@ const Course = require("../models/Course");
 const Bootcamp = require("../models/Bootcamp");
 const AsyncHandler = require("../middleware/async");
 
+const ErrorResponse = require("../utils/errorResponse");
+
 // @desc 		Get all courses
 // @route 	GET /api/v1/courses
 // @route 	GET /api/v1/bootcamps/:bootcampId/courses
@@ -90,5 +92,25 @@ exports.updateCourse = AsyncHandler(async (req, res, next) => {
 	res.status(200).json({
 		success: true,
 		data: course,
+	});
+});
+
+// @desc 		Delete a course
+// @route		DELETE /api/v1/courses/:id
+// @access 	Private
+exports.deleteCourse = AsyncHandler(async (req, res, next) => {
+	const course = await Course.findById(req.params.id);
+
+	if (!course) {
+		return next(
+			new ErrorResponse(`No course found with id of ${req.params.id}`, 404)
+		);
+	}
+
+	await course.remove();
+
+	res.status(200).json({
+		success: true,
+		data: {},
 	});
 });
