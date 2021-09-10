@@ -30,6 +30,9 @@ app.use("/api/v1/bootcamps", bootcamps);
 const courses = require("./routes/courses");
 app.use("/api/v1/courses", courses);
 
+const auth = require("./routes/auth");
+app.use("/api/v1/auth", auth);
+
 app.use(errorHandler);
 
 // Start listening
