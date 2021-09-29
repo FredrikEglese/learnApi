@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const morgan = require("morgan");
 const colors = require("colors");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 const errorHandler = require("./middleware/error");
 const connectDB = require("./config/db");
@@ -16,6 +17,10 @@ const PORT = process.env.PORT || 5000;
 connectDB();
 
 const app = express();
+
+// Allow requests from just local react app
+// TODO : Make this configurable
+app.use(cors({ origin: "http://localhost:3000" }));
 
 // Body parser
 app.use(express.json());

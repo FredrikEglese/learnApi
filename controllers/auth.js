@@ -26,7 +26,7 @@ exports.loginUser = AsyncHandler(async (req, res, next) => {
 	const { email, password } = req.body;
 
 	// Validate email & password
-	if (!email || !password) {
+	if (!email || !password || email == null || password == null) {
 		return next(new ErrorResponse("Please provide an email and password", 400));
 	}
 
