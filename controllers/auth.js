@@ -48,7 +48,7 @@ exports.loginUser = AsyncHandler(async (req, res, next) => {
 });
 
 // @desc    Create new user
-// @route   POST /api/v1/auth/register
+// @route   GET /api/v1/auth/register
 // @access  Private
 exports.getMe = AsyncHandler(async (req, res, next) => {
 	const user = await User.findById(req.user.id);
